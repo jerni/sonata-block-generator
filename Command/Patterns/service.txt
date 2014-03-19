@@ -1,0 +1,8 @@
+        <service id="{blockname}.block.service" class="{blockclass}">
+            <tag name="sonata.block" />
+            <argument>{blockname}.block.service</argument>
+            <argument type="service" id="templating" />
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>

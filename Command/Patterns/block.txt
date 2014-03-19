@@ -1,0 +1,79 @@
+<?php
+
+namespace {namespace};
+
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
+use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Validator\ErrorElement;
+
+use Sonata\BlockBundle\Model\BlockInterface;
+use Sonata\BlockBundle\Block\BlockContextInterface;
+use Sonata\BlockBundle\Block\BaseBlockService;
+
+class {classname}Block extends BaseBlockService{
+  /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return '{classname} Block';
+    }
+    
+    protected $container;
+    
+    public function setContainer($container){
+      $this->container = $container;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDefaultSettings(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'title'    => '{classname}',
+            'template' => '{template}',
+        ));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function buildEditForm(FormMapper $formMapper, BlockInterface $block)
+    {
+        $formMapper->add('settings', 'sonata_type_immutable_array', array(
+            'keys' => array(
+                array('title', 'text', array('required' => false)),
+            )
+        ));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validateBlock(ErrorElement $errorElement, BlockInterface $block)
+    {
+        $errorElement
+            ->with('settings[title]')
+                ->assertNotNull(array())
+                ->assertNotBlank()
+                ->assertMaxLength(array('limit' => 50))
+            ->end();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function execute(BlockContextInterface $blockContext, Response $response = null)
+    {
+        // merge settings
+        $settings = $blockContext->getSettings();
+
+        return $this->renderResponse($blockContext->getTemplate(), array(
+            'block'     => $blockContext->getBlock(),
+            'settings'  => $settings
+        ), $response);
+    }
+}
