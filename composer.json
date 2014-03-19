@@ -12,11 +12,16 @@
             "homepage": "http://jsmierni.com"
         }
     ],
+    "minimum-stability": "dev",
     "require": {
-        "rz/page-bundle":"dev-master"
+        "rz/page-bundle":"1.0.x-dev"
     },
     "autoload": {
         "psr-4": { "Jse\\BlockGeneratorBundle\\": "" }
     },
-    "target-dir": "Jse/BlockGeneratorBundle"
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0"
+        }
+    }
 }
