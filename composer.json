@@ -1,0 +1,27 @@
+{
+    "name": "jerni/sonata-block-generator",
+    "type": "symfony-bundle",
+    "description": "Symfony2 Bundle Block generator Extension",
+    "keywords": ["symfony2", "Sonata Project", "block", "generator"],
+    "homepage": "https://github.com/jerni/sonata-block-generator",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "jse",
+            "email": "ernijosephstalin@gmail.com",
+            "homepage": ""
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "rz/page-bundle":"dev-master"
+    },
+    "autoload": {
+        "psr-4": { "Jse\\BlockGeneratorBundle\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0"
+        }
+    }
+}
