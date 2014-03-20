@@ -14,14 +14,14 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "rz/page-bundle":"1.0.x-dev"
+        "rz/page-bundle":"~1.0.x-dev"
     },
     "autoload": {
         "psr-4": { "Jse\\BlockGeneratorBundle\\": "" }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.0"
+            "dev-master": "1.0.x-dev"
         }
     }
 }
