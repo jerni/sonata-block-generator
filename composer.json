@@ -12,9 +12,7 @@
             "homepage": "http://jsmierni.com/"
         }
     ],
-    "require": {
-        "rz/page-bundle":"~1.0.x-dev"
-    },
+    "minimum-stability" : "dev",
     "autoload": {
         "psr-4": { "Jse\\BlockGeneratorBundle\\": "" }
     },
