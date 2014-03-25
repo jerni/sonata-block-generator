@@ -62,15 +62,10 @@ class BlockGeneratorCommand extends ContainerAwareCommand
         $fs->touch($blockTwig);
         $fs->dumpFile($blockTwig, $patternTwig);
         
-        $bundleServiceDir = $dir.'/../src/'.$input->getOption('bundle').'/Resources/config/services.xml';
-        $serviceContent = file_get_contents($bundleServiceDir);
         $blockClassName = str_replace('/', '\\', $input->getOption('bundle')).'\\Block\\'.$name.'Block';
-        $updateService = trim(str_replace(array('</services>', '</container>'), array('', ''), $serviceContent),"\r\n");
         $patternService = file_get_contents(dirname(__FILE__).'/Patterns/service.txt');
         $servicePattern = str_replace(array('{blockname}', '{blockclass}'), array($twig, $blockClassName), $patternService);
-        $updateService = trim(str_replace($servicePattern, '', $updateService),"\r\n");
-        $fs->dumpFile($bundleServiceDir, $updateService.$servicePattern."\n\t\t".'</services>'."\n".'</container>');
 
-        $output->writeln($twig.'.block.service');
+        $output->writeln("\n\n".'Block Service: '."\n\n".$servicePattern);
     }
 }
