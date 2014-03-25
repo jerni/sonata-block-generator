@@ -14,11 +14,14 @@
     ],
     "minimum-stability" : "dev",
     "require": {
-        "rz/page-bundle":"~1.0.x-dev",
-        "jerni/sonata-block-generator": "v1.0.0"
+        "rz/page-bundle":"~1.0.x-dev"
     },
     "autoload": {
         "psr-4": { "Jse\\BlockGeneratorBundle\\": "" }
     },
-    "target-dir": "Jse/BlockGeneratorBundle"
+    "extra": {
+        "branch-alias": {
+            "dev-master": "v1.0.0"
+        }
+    }
 }
