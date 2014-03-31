@@ -12,4 +12,4 @@ Register bundle in AppKernel.php
 
 command:
 
-php app/console create:block blockname --bundle=Jse/BlockGeneratorBundle
+php app/console create:block blockname --bundle=Acme/DemoBundle
