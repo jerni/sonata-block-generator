@@ -13,9 +13,6 @@
         }
     ],
     "minimum-stability" : "dev",
-    "require": {
-        "rz/page-bundle":"2.0.x-dev"
-    },
     "autoload": {
         "psr-4": { "Jse\\BlockGeneratorBundle\\": "" }
     },
