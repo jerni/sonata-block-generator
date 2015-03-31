@@ -18,16 +18,31 @@ class BlockGeneratorCommand extends ContainerAwareCommand
         $this
             ->setName('create:block')
             ->setDescription('Create Block Service')
-            ->addArgument('name', InputArgument::OPTIONAL, 'block name?')
+            ->addArgument('name', InputArgument::REQUIRED, 'block name?')
             ->addOption('bundle', null, InputOption::VALUE_REQUIRED, 'bundle');
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $inputBunlde = $input->getOption('bundle');
+        $bundles = $this->getContainer()->getParameter('kernel.bundles');
+        $bundleNames = array_keys($bundles);
+        if(in_array($inputBunlde, $bundleNames)){
+            $namespace = str_replace('\\'.$inputBunlde, '', $bundles[$inputBunlde]);
+            $bundleName = $inputBunlde;
+        } else {
+            throw new \RuntimeException(
+                'The Bundle does not exists.'
+            );
+        }
+        
+        $bundleDir = $this->getContainer()->get('kernel')->locateResource('@'.$inputBunlde);
+        
         $dir = $this->getContainer()->get('kernel')->getRootDir();
-        $bundleBlockDir = $dir.'/../src/'.$input->getOption('bundle').'/Block';
-        $bundleTwigDir = $dir.'/../src/'.$input->getOption('bundle').'/Resources/views/Block';
+        $bundleBlockDir = $bundleDir.'Block';
+        $bundleTwigDir = $bundleDir.'Resources/views/Block';
+    
     
         $fs = new Filesystem();
 
@@ -39,19 +54,21 @@ class BlockGeneratorCommand extends ContainerAwareCommand
                 $fs->mkdir($bundleTwigDir);
             }
         } catch (IOExceptionInterface $e) {
-            echo "An error occurred while creating your directory at ".$e->getPath();
+            $output->writeln("An error occurred while creating your directory at ".$e->getPath());
         }
         
-        $twig = strtolower($input->getArgument('name'));
+        $twig = str_replace(' ', '_', strtolower($input->getArgument('name')));
         $patternBlock = file_get_contents(dirname(__FILE__).'/Patterns/block.txt');
-        $name = ucfirst(strtolower($input->getArgument('name')));
+        $name = ucwords(strtolower($input->getArgument('name')));
+        $name = str_replace(' ', '', $name);
         $blockClass = $bundleBlockDir.'/'.$name.'Block.php';
         $fs->touch($blockClass);
-        $patternBlock = str_replace(array('{classname}', '{namespace}', '{template}'), 
+        $patternBlock = str_replace(array('{classname}', '{namespace}', '{template}', '{blockdisplayname}'), 
                                     array(
                                           $name, 
-                                          str_replace('/', '\\', $input->getOption('bundle')).'\\Block', 
-                                          str_replace('/', '', $input->getOption('bundle')).':Block:'.$twig.'.html.twig'
+                                          $namespace.'\\Block', 
+                                          $bundleName.':Block:'.$twig.'.html.twig',
+                                          $input->getArgument('name')
                                           ),
                                           $patternBlock);
         $fs->dumpFile($blockClass, $patternBlock);
@@ -62,7 +79,7 @@ class BlockGeneratorCommand extends ContainerAwareCommand
         $fs->touch($blockTwig);
         $fs->dumpFile($blockTwig, $patternTwig);
         
-        $blockClassName = str_replace('/', '\\', $input->getOption('bundle')).'\\Block\\'.$name.'Block';
+        $blockClassName = $namespace.'\\Block\\'.$name.'Block';
         $patternService = file_get_contents(dirname(__FILE__).'/Patterns/service.txt');
         $servicePattern = str_replace(array('{blockname}', '{blockclass}'), array($twig, $blockClassName), $patternService);
 

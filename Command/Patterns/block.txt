@@ -18,7 +18,7 @@ class {classname}Block extends BaseBlockService{
      */
     public function getName()
     {
-        return '{classname} Block';
+        return '{blockdisplayname} Block';
     }
     
     protected $container;
@@ -33,7 +33,7 @@ class {classname}Block extends BaseBlockService{
     public function setDefaultSettings(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'title'    => '{classname}',
+            'title'    => '{blockdisplayname}',
             'template' => '{template}',
         ));
     }
@@ -59,7 +59,6 @@ class {classname}Block extends BaseBlockService{
             ->with('settings[title]')
                 ->assertNotNull(array())
                 ->assertNotBlank()
-                ->assertMaxLength(array('limit' => 50))
             ->end();
     }
 
